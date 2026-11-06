@@ -12,25 +12,46 @@ const router = Router();
  *     responses:
  *       200:
  *         description: Lista de pedidos
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: success
- *                 payload:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Order'
- *       500:
- *         description: Error interno
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *   post:
+ *     summary: Crea un nuevo pedido
+ *     tags: [Orders]
+ *     responses:
+ *       201:
+ *         description: Pedido creado exitosamente
+ *       400:
+ *         description: Datos de pedido inválidos o incompletos
  */
 router.get('/', OrderController.getOrders);
+router.post('/', OrderController.createOrder);
+
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   get:
+ *     summary: Obtiene un pedido por ID
+ *     tags: [Orders]
+ *     responses:
+ *       200:
+ *         description: Pedido encontrado
+ *       404:
+ *         description: Pedido no encontrado
+ */
+router.get('/:id', OrderController.getOrderById);
+
+/**
+ * @swagger
+ * /api/orders/{id}/status:
+ *   put:
+ *     summary: Actualiza el estado de un pedido
+ *     tags: [Orders]
+ *     responses:
+ *       200:
+ *         description: Estado actualizado exitosamente
+ *       400:
+ *         description: Estado no válido
+ *       404:
+ *         description: Pedido no encontrado
+ */
+router.put('/:id/status', OrderController.updateOrderStatus);
 
 export const orderRouter = router;

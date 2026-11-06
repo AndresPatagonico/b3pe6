@@ -10,8 +10,18 @@ before(async function () {
     }
 });
 
+beforeEach(async () => {
+    if (mongoose.connection.readyState !== 0) {
+        const collections = mongoose.connection.collections;
+        for (const key in collections) {
+            await collections[key].deleteMany({});
+        }
+    }
+});
+
 after(async function () {
     if (mongoose.connection.readyState !== 0) {
+        await mongoose.connection.dropDatabase();
         await mongoose.connection.close();
     }
 });

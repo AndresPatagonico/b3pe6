@@ -7,19 +7,19 @@ const requester = supertest(app);
 
 describe('Suite de Tests Funcionales - Módulo de Mocks', () => {
 
-    it('POST /api/mocks/seed - Debe generar e insertar datos válidos (éxito)', async () => {
+    it('POST /api/mocks/seed - Debe generar e insertar datos válidos (éxito 200/201)', async () => {
         const response = await requester.post('/api/mocks/seed?qty=2');
 
         expect(response.status).to.be.oneOf([200, 201]);
-        expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('status').that.equals('success');
     });
 
-    it('POST /api/mocks/seed - Debe fallar si se envían cantidades inválidas (error)', async () => {
+    it('POST /api/mocks/seed - Debe fallar con 400 exacto si la cantidad es inválida', async () => {
         const response = await requester.post('/api/mocks/seed?qty=-5');
 
-        expect(response.status).to.be.oneOf([400, 422]);
+        expect(response.status).to.equal(400);
         expect(response.body).to.have.property('status').that.equals('error');
+        expect(response.body).to.have.property('message');
     });
 
 });
